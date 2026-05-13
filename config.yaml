@@ -1,0 +1,9 @@
+# GitHub token with repo scope (or set GITHUB_TOKEN env var)
+github_token: "${TRAFFIC_TOKEN}"
+
+# Directory where CSV data files are written (relative to this file, or absolute)
+data_dir: "data"
+
+# Repos to track
+repos:
+  - CWorthy-ocean/C-Star

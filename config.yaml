@@ -8,3 +8,4 @@ data_dir: "data"
 repos:
   - CWorthy-ocean/C-Star
   - CWorthy-ocean/roms-tools
+  - CWorthy-ocean/cson-forge

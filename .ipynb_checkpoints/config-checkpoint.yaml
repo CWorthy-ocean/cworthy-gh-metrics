@@ -1,9 +1,0 @@
-# GitHub token with repo scope (or set GITHUB_TOKEN env var)
-github_token: "${TRAFFIC_TOKEN}"
-
-# Path to SQLite database (relative to this file, or absolute)
-db_path: "metrics.db"
-
-# Repos to track
-repos:
-  - CWorthy-ocean/C-Star

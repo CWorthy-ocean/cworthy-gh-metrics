@@ -9,7 +9,7 @@ jobs:
   collect:
     runs-on: ubuntu-latest
     permissions:
-      contents: write      # needed to push CSV data back to the repo
+      contents: write      # needed to push data and assets back to the repo
 
     steps:
       - uses: actions/checkout@v4
@@ -27,10 +27,13 @@ jobs:
           TRAFFIC_TOKEN: ${{ secrets.TRAFFIC_TOKEN }}
         run: python collect.py
 
-      - name: Commit updated data
+      - name: Generate plots and README
+        run: python make_plots.py
+
+      - name: Commit updated data and plots
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/
+          git add data/ assets/ README.md
           git diff --staged --quiet || git commit -m "metrics: $(date -u +%Y-%m-%d)"
           git push

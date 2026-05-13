@@ -7,3 +7,4 @@ data_dir: "data"
 # Repos to track
 repos:
   - CWorthy-ocean/C-Star
+  - CWorthy-ocean/roms-tools

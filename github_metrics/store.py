@@ -19,6 +19,7 @@ _PRIMARY_KEYS: dict[str, list[str]] = {
     "referrers":  ["fetched_date", "referrer"],
     "paths":      ["fetched_date", "path"],
     "repo_stats": ["fetched_date"],
+    "snapshots":  ["fetched_date"],
 }
 
 

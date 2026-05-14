@@ -9,3 +9,7 @@ repos:
   - CWorthy-ocean/C-Star
   - CWorthy-ocean/roms-tools
   - CWorthy-ocean/cson-forge
+
+# conda-forge packages to track (no token needed)
+conda_packages:
+  - roms-tools

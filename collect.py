@@ -22,7 +22,7 @@ from pathlib import Path
 
 import yaml
 
-from github_metrics import collect
+from github_metrics import collect, collect_conda
 
 logging.basicConfig(
     level=logging.INFO,
@@ -46,11 +46,12 @@ def _resolve_token(raw: str) -> str:
     return raw
 
 
-def _load_config(config_path: Path) -> tuple[list[str], Path, str]:
+def _load_config(config_path: Path) -> tuple[list[str], list[str], Path, str]:
     with config_path.open() as fh:
         cfg = yaml.safe_load(fh)
 
     repos = cfg.get("repos") or []
+    conda_packages = cfg.get("conda_packages") or []
     token = _resolve_token(cfg.get("github_token", "${TRAFFIC_TOKEN}"))
 
     data_raw = cfg.get("data_dir", "data")
@@ -58,7 +59,7 @@ def _load_config(config_path: Path) -> tuple[list[str], Path, str]:
     if not data_dir.is_absolute():
         data_dir = config_path.parent / data_dir
 
-    return repos, data_dir, token
+    return repos, conda_packages, data_dir, token
 
 
 def main() -> None:
@@ -71,7 +72,7 @@ def main() -> None:
 
     config_path = Path(args.config) if args.config else Path(__file__).parent / "config.yaml"
 
-    repos, data_dir, token = _load_config(config_path)
+    repos, conda_packages, data_dir, token = _load_config(config_path)
 
     if args.repo:
         repos = [args.repo]
@@ -80,14 +81,18 @@ def main() -> None:
     if args.data_dir:
         data_dir = Path(args.data_dir)
 
-    if not repos:
-        log.error("No repos configured. Add entries under 'repos:' in config.yaml.")
-        sys.exit(1)
+    errors = []
 
-    log.info("Starting collection for %d repo(s) → %s", len(repos), data_dir)
-    summary = collect(repos, data_dir=data_dir, token=token)
+    if repos:
+        log.info("Starting GitHub collection for %d repo(s) → %s", len(repos), data_dir)
+        gh_summary = collect(repos, data_dir=data_dir, token=token)
+        errors += [r for r, v in gh_summary.items() if "error" in v]
 
-    errors = [r for r, v in summary.items() if "error" in v]
+    if conda_packages:
+        log.info("Starting conda collection for %d package(s) → %s", len(conda_packages), data_dir)
+        conda_summary = collect_conda(conda_packages, data_dir=data_dir)
+        errors += [p for p, v in conda_summary.items() if "error" in v]
+
     if errors:
         log.error("Finished with errors in: %s", errors)
         sys.exit(1)

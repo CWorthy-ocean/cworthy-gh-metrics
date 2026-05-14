@@ -1,9 +1,9 @@
 # GitHub Metrics
 
 Automated daily collection of traffic and engagement data for
-[C]Worthy GitHub repositories and conda-forge packages.
-Data is fetched via the GitHub and Anaconda APIs and stored as CSV files
-under [`data/`](data/). Plots are regenerated each time new data is collected.
+[C]Worthy GitHub repositories and conda-forge/PyPI packages.
+Data is fetched via the GitHub, Anaconda, and PyPI APIs and stored as CSV
+files under [`data/`](data/). Plots are regenerated each time new data is collected.
 
 ---
 ## GitHub Traffic
@@ -20,6 +20,6 @@ under [`data/`](data/). Plots are regenerated each time new data is collected.
 
 ![Traffic metrics for CWorthy-ocean/cson-forge](assets/CWorthy-ocean/cson-forge/traffic.png)
 
-## Conda Downloads
+## Conda / PyPI
 
-![conda-forge download counts](assets/conda/downloads.png)
+![Conda and PyPI download counts](assets/conda-pip/downloads.png)

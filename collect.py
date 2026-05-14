@@ -22,7 +22,7 @@ from pathlib import Path
 
 import yaml
 
-from github_metrics import collect, collect_conda
+from github_metrics import collect, collect_conda, collect_pypi
 
 logging.basicConfig(
     level=logging.INFO,
@@ -52,6 +52,7 @@ def _load_config(config_path: Path) -> tuple[list[str], list[str], Path, str]:
 
     repos = cfg.get("repos") or []
     conda_packages = cfg.get("conda_packages") or []
+    pypi_packages = cfg.get("pypi_packages") or []
     token = _resolve_token(cfg.get("github_token", "${TRAFFIC_TOKEN}"))
 
     data_raw = cfg.get("data_dir", "data")
@@ -59,7 +60,7 @@ def _load_config(config_path: Path) -> tuple[list[str], list[str], Path, str]:
     if not data_dir.is_absolute():
         data_dir = config_path.parent / data_dir
 
-    return repos, conda_packages, data_dir, token
+    return repos, conda_packages, pypi_packages, data_dir, token
 
 
 def main() -> None:
@@ -72,7 +73,7 @@ def main() -> None:
 
     config_path = Path(args.config) if args.config else Path(__file__).parent / "config.yaml"
 
-    repos, conda_packages, data_dir, token = _load_config(config_path)
+    repos, conda_packages, pypi_packages, data_dir, token = _load_config(config_path)
 
     if args.repo:
         repos = [args.repo]
@@ -92,6 +93,11 @@ def main() -> None:
         log.info("Starting conda collection for %d package(s) → %s", len(conda_packages), data_dir)
         conda_summary = collect_conda(conda_packages, data_dir=data_dir)
         errors += [p for p, v in conda_summary.items() if "error" in v]
+
+    if pypi_packages:
+        log.info("Starting PyPI collection for %d package(s) → %s", len(pypi_packages), data_dir)
+        pypi_summary = collect_pypi(pypi_packages, data_dir=data_dir)
+        errors += [p for p, v in pypi_summary.items() if "error" in v]
 
     if errors:
         log.error("Finished with errors in: %s", errors)

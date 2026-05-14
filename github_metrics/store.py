@@ -14,12 +14,17 @@ from pathlib import Path
 import pandas as pd
 
 _PRIMARY_KEYS: dict[str, list[str]] = {
-    "views":      ["date"],
-    "clones":     ["date"],
-    "referrers":  ["fetched_date", "referrer"],
-    "paths":      ["fetched_date", "path"],
-    "repo_stats": ["fetched_date"],
-    "snapshots":  ["fetched_date"],
+    "views":        ["date"],
+    "clones":       ["date"],
+    "referrers":    ["fetched_date", "referrer"],
+    "paths":        ["fetched_date", "path"],
+    "repo_stats":   ["fetched_date"],
+    "snapshots":    ["fetched_date"],
+    "by_platform":  ["fetched_date", "platform"],
+    "by_version":   ["fetched_date", "version"],
+    "overall":      ["date"],
+    "by_system":    ["date", "system"],
+    "by_python":    ["date", "python_version"],
 }
 
 

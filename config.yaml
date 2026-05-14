@@ -13,3 +13,7 @@ repos:
 # conda-forge packages to track (no token needed)
 conda_packages:
   - roms-tools
+
+# PyPI packages to track (no token needed)
+pypi_packages:
+  - roms-tools

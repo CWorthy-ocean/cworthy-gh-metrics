@@ -6,6 +6,10 @@ Data is fetched via the GitHub, Anaconda, and PyPI APIs and stored as CSV
 files under [`data/`](data/). Plots are regenerated each time new data is collected.
 
 ---
+## Release timeline
+
+![Release timeline for the CWorthy ROMS stack](assets/release-timeline.png)
+
 ## GitHub Traffic
 
 ### [CWorthy-ocean/C-Star](https://github.com/CWorthy-ocean/C-Star)

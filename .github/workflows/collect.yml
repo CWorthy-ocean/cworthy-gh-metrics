@@ -22,6 +22,25 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Clone stack repos for the release timeline
+        # release_timeline.py reads tags and first-commit dates from local
+        # clones under ~/git (GIT_ROOT). Blobless clones keep full history and
+        # tags -- the only things the script reads -- without the file blobs.
+        # ucla-roms is a CWorthy fork of CESR-lab; the CESR-lab remote lets the
+        # script exclude upstream history so the lane starts at the fork point.
+        run: |
+          mkdir -p ~/git
+          for repo in roms-tools C-Star ucla-roms cstar-forge; do
+            git clone --filter=blob:none \
+              "https://github.com/CWorthy-ocean/$repo.git" ~/git/"$repo"
+          done
+          git -C ~/git/ucla-roms remote add CESR-lab \
+            https://github.com/CESR-lab/ucla-roms.git
+          git -C ~/git/ucla-roms fetch CESR-lab --no-tags --quiet
+
+      - name: Build release timeline plot
+        run: python release_timeline.py -o assets/release-timeline.png
+
       - name: Collect metrics
         env:
           TRAFFIC_TOKEN: ${{ secrets.TRAFFIC_TOKEN }}

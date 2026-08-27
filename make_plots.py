@@ -213,6 +213,16 @@ def write_readme(
 ) -> None:
     sections = []
 
+    # Release timeline is produced by release_timeline.py in a separate step,
+    # so it may be absent if that step failed -- only embed it when present.
+    timeline_img = assets_dir / "release-timeline.png"
+    if timeline_img.exists():
+        img_rel = timeline_img.relative_to(readme_path.parent)
+        sections.append(
+            "## Release timeline\n\n"
+            f"![Release timeline for the CWorthy ROMS stack]({img_rel})\n"
+        )
+
     if repos:
         sections.append("## GitHub Traffic\n")
         for repo in repos:
